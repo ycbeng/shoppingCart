@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login </title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+	.inputTextBox{
+		font-size:1em;
+		color:#CCC;
+		margin-left:20px;
+		border:none;
+		border-bottom: 2px solid #CCC;
+		padding:10px 2px;
+		
+	}
+
+	.loginButton{
+		background-color: green;
+		color: #CCC;
+		border-radius: 25px;
+		padding:14px 55px;
+		margin-bottom: 20px;
+		border: none;
+		
+	}
+
+	.formTitle{
+		background-repeat: no-repeat;
+  		background-size: cover;
+  		background-position: center;
+		
+		width: 100%;
+  		position: relative;
+		height:170px;
+  		
+		display: flex;
+		flex-wrap: wrap;
+  		flex-direction: column;
+  		align-items: center;
+	}
+
+	.wrapLogin{
+		width: 670px;
+  		background: #fff;
+  		border-radius: 10px;
+  		overflow: hidden;
+  		position: relative;
+	}
+
+	.option{
+		display: inline-block;
+		margin-right: 15px;
+		margin-top:5px;
+		text-decoration:none;
+		color:#999;
+		font-size:0.9em;		
+	}
+
+	.optionFormat{
+		margin-left:130px;
+		margin-bottom: 10px;
+	}
+
+	body{
+		background-color: aquamarine;
+	}
+</style>
+</head>
+<body>
+	
+	<div>
+		<div align="center">
+			<div class="wrapLogin">
+				<div class="formTitle" style="background-image: url(images/bg-01.jpg);">
+					<p style="font-family:Verdana, Geneva, sans-serif; color:#FFF; font-size:2em; text-align:center;  margin-top:80px;">
+						Sign In
+					</p>
+				</div>
+
+				<form action="verification.php" method="POST">
+					<div  data-validate="Username is required">
+						<span>Username</span>
+						<input class="inputTextBox" type="text" name="username" placeholder="Enter username">
+						<span></span>
+					</div>
+
+					<div data-validate = "Password is required">
+						<span>Password</span>
+						<input class="inputTextBox" type="password" name="pass" placeholder="Enter password">
+						<span></span>
+					</div>
+
+					<div class="optionFormat">
+						<div class="option">
+							<input id="ckb1" type="checkbox" name="remember-me">
+							<label  for="ckb1">
+								Remember me
+							</label>
+						</div>
+
+						<div class="option">
+							<a href="#" class="txt1">
+								Forgot Password?
+							</a>
+						</div>
+					</div>
+
+					<div align="center">
+						<input class="loginButton" type="submit" name="submit" value="Login" />
+							
+						
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
