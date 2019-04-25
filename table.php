@@ -1,6 +1,16 @@
 <?php
 include('config.php');
-
+	// for delete selected item
+	if(empty($_REQUEST['item'])) {    
+	// No items checked
+	}
+	else {    //$deleteName = checkbox value = prodcut primary key
+		foreach($_REQUEST['item'] as $deleteName) {		
+			$sql="update product_detail set available='0' where ID='$deleteName'";
+			$result=$conn->query($sql);		
+		}
+	}
+	
 
 ?>
 <!doctype html>
@@ -9,10 +19,18 @@ include('config.php');
 <meta charset="UTF-8">
 <title>Product Information</title>
 <link href="main.css" rel="stylesheet">
+<script>
+	function ConfirmDelete() {  
+
+		return confirm("Are you sure you want to delete?");
+	}
+
+</script>
 </head>
 
 <body>
 	<h1>ABC Company Product Info</h1>
+	<form action="table.php" method="post">
 	<table class="inventory" width="100%">
 		<caption>
 			Welcome! User1
@@ -39,7 +57,7 @@ if($result->num_rows>0){
 ?>
 		<!-- Loop data from product_detail -->
 		<tr>
-			<td><input type="checkbox" name="item[]" value="" /></td>
+			<td><input type="checkbox" name="item[]" value="<?php echo 	$row["ID"]; ?>" /></td>
 			<td><?php echo $row['ID'];?></td>
 			<td><?php echo $row['title'];?></td>
 			<td><?php echo $row['price'];?></td>
@@ -57,5 +75,6 @@ if($result->num_rows>0){
 		</tr>
 		
 	</table>
+	</form>
 </body>
 </html>
