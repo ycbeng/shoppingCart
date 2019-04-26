@@ -23,10 +23,12 @@ if ($stmt = $conn->prepare("select username,password from user where username=? 
     $stmt->bind_result($user,$pass);    
     if($stmt->fetch()){		
 		$_SESSION['user'] = $u; //assign the username to session value		
-		echo $_SESSION['user']." login Successful";
+        echo $_SESSION['user']." login Successful";
+        echo "<script>window.location.assign('table.php');</script>";
     }
     else{
         echo "Login Fail";
+        echo "<script>window.location.assign('index.html');</script>";
     }
     $stmt->close();
 }
