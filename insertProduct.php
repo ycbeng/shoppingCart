@@ -13,7 +13,7 @@ if(isset($_POST['insert'])){
 	
 	$sql="insert into product_detail values ('$ID','$title','$price','$image','$quantity','$category','$description','1')";
 	
-	$result-$conn->query($sql);
+	$result=$conn->query($sql);
 	
 	
 	
