@@ -23,6 +23,13 @@ session_start();
 	<table class="inventory" width="100%">
 		
 		<?php
+			//------------logout----------------------------
+			if(isset($_GET['u'])){
+				if($_GET['u']=='logout'){
+				session_destroy();
+				echo "<script>window.location.assign('index.html');</script>";
+				}
+			}			
 			if($_SESSION['user']!=''){
 				$user=$_SESSION['user'];
 			}
@@ -31,7 +38,7 @@ session_start();
 			}
 		?>
 		<caption>
-			Welcome! <?php echo $user; ?>
+			Welcome! <?php echo $user; ?><a href="table.php?u=logout">Logout</a> 
 		</caption>
 		<colgroup>
 			<col id="#">
