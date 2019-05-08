@@ -1,5 +1,20 @@
 <?php
 include("config.php");
+session_start();
+
+			//------------logout----------------------------
+			if(isset($_GET['u'])){
+				if($_GET['u']=='logout'){
+				session_destroy();
+				echo "<script>window.location.assign('index.html');</script>";
+				}
+			}			
+			if($_SESSION['user']!=''){
+				$user=$_SESSION['user'];
+			}
+			else{
+				echo "<script>window.location.assign('index.html');</script>";
+			}
 
 
 if(isset($_POST['insert'])){
@@ -14,10 +29,44 @@ if(isset($_POST['insert'])){
 	$sql="insert into product_detail values ('$ID','$title','$price','$image','$quantity','$category','$description','1')";
 	
 	$result=$conn->query($sql);
+
+	$target_dir = "images/";  //step1
+	$target_file = $target_dir . $image; //step 2
+	$uploadOk = 1;
+	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+	// Check if image file is a actual image or fake image
+	if(isset($_POST["submit"])) {
+		$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+		if($check !== false) {
+			echo "File is an image - " . $check["mime"] . ".";
+			$uploadOk = 1;
+		} else {
+			echo "File is not an image.";
+			$uploadOk = 0;
+		}
+	}
 	
-	
-	
-	
+	// Check file size
+	if ($_FILES["fileToUpload"]["size"] > 500000) {
+		echo "Sorry, your file is too large.";
+		$uploadOk = 0;
+	}
+	// Allow certain file formats
+	if($imageFileType != "jpg") {  //step 3
+		echo "Sorry, only JPG file are allowed.";
+		$uploadOk = 0;
+	}
+	// Check if $uploadOk is set to 0 by an error
+	if ($uploadOk == 0) {
+		echo "Sorry, your file was not uploaded.";
+	// if everything is ok, try to upload file
+	} else {
+		if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+			echo "The file has been uploaded.";
+		} else {
+			echo "Sorry, there was an error uploading your file.";
+		}
+	}	
 }
 
 
@@ -35,6 +84,7 @@ if(isset($_POST['insert'])){
 </head>
 <body>
 <h1>Product Information</h1>
+<h5><?php echo $user; ?><a href="table.php?u=logout">Logout</a></h5>
 <form class="subform"  method="post" action="insertProduct.php" enctype="multipart/form-data">
 
 	<p>
