@@ -1,3 +1,7 @@
+<?php
+include("config.php");
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -41,54 +45,49 @@
               
             </div>
           </nav>
-    
-              <!-- <img src="images/promotion_03.jpg" alt="" class="img-fluid" width=100%  > -->
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                  <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                  </ol>
-                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                      <img src="images/promotion_01.jpg" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                      <img src="images/promotion_02.jpg" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                      <img src="images/promotion_03.jpg" class="d-block w-100" alt="...">
-                    </div>
-                  </div>
-                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                  </a>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">2
                 </div>
-          
+                <div class="col-md-1">1
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-title">Products</div>
+                            <div class="row">
+                                <?php
+                                    $sql="select ID,title,price,image from product_detail where available=1";
+                                    $result=$conn->query($sql);
+                                    if ($result->num_rows > 0) {
+                                        while($row = $result->fetch_assoc()) {            
+                                          $ID=$row['ID'];
+                                          $title=$row['title'];
+                                          $price=$row['price'];
+                                          $image=$row['image'];
+                                ?>
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $title; ?></h5>
+                                        <img src="images/<?php echo $image; ?>" alt="" class="img-fluid">
+                                        <div class="card-heading">RM <?php echo $price; ?> <button style="float:right;" class="btn btn-danger btn-xs">AddToCart</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                 <?php
+                                        }}
+                                 ?>
+                            </div>
+                        </div>
+                        <div class="card card-footer">&copy; 2018</div>
+                    </div>
 
-    <div class="container-fluid">  
-        <div class="row">
-            <div class="col-md-4"><img src="images/samsungphone.jpg" alt="" class="img-fluid" width=60%  ></div>
-            <div class="col-md-4"><img src="images/vivoPhone.jpg" alt="" class="img-fluid" width=60%  ></div>
-            <div class="col-md-4"><img src="images/xiaomiPhone.jpg" alt="" class="img-fluid" width=60%  ></div>
+                </div>
+                <div class="col-md-1">1
+                </div>
+            </div>
         </div>
-
-        <div class="copyright text-center">
-          &copy; Copyright <strong>ABC company</strong>. All Rights Reserved
-        </div>
-        <div class="credits text-center">
-          Designed by <a href="https://ABC.com/">ABC Company</a>
-        </div>
-    </div>
-
-    
-
-
-    
-  </body>
+    </body>
 </html>
