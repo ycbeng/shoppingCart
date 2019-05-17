@@ -38,26 +38,55 @@ include("config.php");
                           
               </div>     
 
-                <form class="form-inline">
-                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="form-inline" action="products.php" method="post">
+                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
                   <button class="btn btn-primary my-2 my-sm-0 " type="submit">Search</button>
                 </form>
               
             </div>
           </nav>
 
-        <div class="container-fluid">
+        <div class="container-fluid" style="margin-top:10px">
             <div class="row">
-                <div class="col-md-2">2
+                <div class="col-md-2">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Brands</li>
+                        <li class="list-group-item"><a href="products.php?category=Samsung">Samsung</a></li>
+                        <li class="list-group-item"><a href="products.php?category=Asus">Asus</a></li>
+                        <li class="list-group-item"><a href="products.php?category=Oppo">Oppo</a></li>
+                        <li class="list-group-item"><a href="products.php?category=Vivo">Vivo</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-1">1
+                <div class="col-md-1">
                 </div>
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-title">Products</div>
                             <div class="row">
                                 <?php
-                                    $sql="select ID,title,price,image from product_detail where available=1";
+                                    $category="";
+                                    if(isset($_GET['category'])){
+                                        $category=" and category='".$_GET['category']."'";
+                                    }
+
+                                    //for pagination
+                                          $page = @$_GET['page']; 
+                                          if($page == 0 || $page == 1){
+                                            $page1 = 0;	
+                                          }
+                                          else {
+                                            $page1 = ($page * 9) - 9;	
+                                          }
+                                    //end code
+
+                                    //get search keyword
+                                    $search="";
+                                    if(isset($_REQUEST['search'])){
+                                        $search=" and title like '%".$_REQUEST['search']."%'";
+                                    }
+                                    
+                                    $sql="select ID,title,price,image from product_detail where available=1".$category.$search." LIMIT ".$page1.", 9";
+
                                     $result=$conn->query($sql);
                                     if ($result->num_rows > 0) {
                                         while($row = $result->fetch_assoc()) {            
@@ -67,7 +96,7 @@ include("config.php");
                                           $image=$row['image'];
                                 ?>
                                 <div class="col-sm-4">
-                                    <div class="card">
+                                    <div class="card h-100">
                                     <div class="card-body">
                                         <h5 class="card-title"><?php echo $title; ?></h5>
                                         <img src="images/<?php echo $image; ?>" alt="" class="img-fluid">
@@ -81,12 +110,24 @@ include("config.php");
                                  ?>
                             </div>
                         </div>
-                        <div class="card card-footer">&copy; 2018</div>
+                        <div class="card card-footer">
+                        <ul class="pagination pagination-md">
+                          <?php                                  
+                            $result = $conn->query("SELECT * FROM product_detail where available='1'");
+                            $count = $result->num_rows;                        
+                            $a = $count / 9;
+                            $a = ceil($a);
+                          ?>
+                            <?php for ($i = 1; $i <= $a; $i++) {?>
+                              <li class="page-item"><a class="page-link" href="products.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li> 
+                            <?php } ?>
+                        </ul>            
+                          &copy; 2018
+                        </div>
                     </div>
 
                 </div>
-                <div class="col-md-1">1
-                </div>
+                <div class="col-md-1"></div>
             </div>
         </div>
     </body>
