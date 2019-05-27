@@ -1,31 +1,20 @@
 <?php 
 include("config.php");
-
-//for pagination
-$page = @$_GET['page'];
-						
-if($page == 0 || $page == 1){
-    $page1 = 0;	
+$ID="1001";
+if(isset($_GET['ID'])){
+    $ID=" and ID='".$_GET['ID']."'";
 }
-else {
-    $page1 = ($page * 9) - 9;	
-}
-//end code
-//search
-$search="";
-if(isset($_REQUEST['search'])){
-    $search=" and title like '%".$_REQUEST['search']."%'";
-}
-
-//for category
-$category="";
-if(isset($_REQUEST['category'])){
-    $category=" and category='".$_REQUEST['category']."'";
-}
-//end code
-
-$sql="select ID,title,price,image from product_detail where available='1'".$search.$category." LIMIT ".$page1.", 9";
+$sql="select ID,title,description,image,price from product_detail where available='1'".$ID;
 $result=$conn->query($sql); //run SQL
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+      $ID=$row['ID'];
+      $title=$row['title'];
+      $description=$row['description'];
+      $image=$row['image'];
+      $price=$row['price'];
+    }
+}     
 ?>
 
 <!doctype html>
@@ -84,41 +73,22 @@ $result=$conn->query($sql); //run SQL
                 <div class="col-md-1"></div>
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-title">Products</div>
-                            <div class="row">
-                                <?php
-                                    if ($result->num_rows > 0) {
-                                        while($row = $result->fetch_assoc()) { 
-                                ?>
-                                <div class="col-sm-4">
-                                    <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?php echo $row['title'];?></h5>
-                                        <a href="product_detail.php?ID=<?php echo $row['ID']; ?>"><img src="images/<?php echo $row['image'];?>" alt="Samsung Galaxy" class="img-fluid"></a>
-                                        <div class="card-heading">RM <?php echo $row['price'];?> <button style="float:right;" class="btn btn-danger btn-xs">AddToCart</button>
-                                        </div>
-                                    </div>
-                                    </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="card border-0">
+                                    <img src="images/<?php echo $image; ?>" alt="" class="img-fluid">
                                 </div>
-                                <?php
-                                        }
-                                    }
-                                ?>
-                            </div>                            
-                        <div class="card card-footer">
-                        <ul class="pagination pagination-lg">                
-                            <?php                                            
-                                $result = $conn->query("SELECT * FROM product_detail where available='1'");
-                                $count = $result->num_rows;
-                                            
-                                $a = $count / 9;
-                                $a = ceil($a);
-                            ?>
-                            <?php for ($i = 1; $i <= $a; $i++) {?>
-                                <li class="page-item"><a class="page-link" href="product_list.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li> 
-                            <?php } ?>
-                        </ul>
-                            &copy; 2019
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $title; ?></h5><br />
+                                        <div style="height:100px"><?php echo $description; ?></div><br/>	
+                                        <div style="height:100px">RM <?php echo $price; ?><button style="float:right;" class="btn btn-danger btn-xs">AddToCart</button>
+                                        </div><br/>			
+                                    </div>                                
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
