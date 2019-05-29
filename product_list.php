@@ -1,5 +1,20 @@
 <?php 
 include("config.php");
+session_start();
+
+//------------logout----------------------------
+
+if(isset($_GET['u'])){
+    if($_GET['u']=='logout'){
+    session_destroy(); //clear $user value
+    echo "<script>window.location.assign('index.html');</script>";
+    }
+}
+$user="";			
+if(isset($_SESSION['user'])){
+    $user=$_SESSION['user'];
+}
+
 
 //for pagination
 $page = @$_GET['page'];
@@ -68,7 +83,28 @@ $result=$conn->query($sql); //run SQL
                   <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
                   <button class="btn btn-primary my-2 my-sm-0 " type="submit">Search</button>
                 </form>
-              
+                <?php
+
+                    if(isset($_SESSION['user'])){ 
+                        echo "<a class='nav-link text-white' href='#'>".$_SESSION['user']."</a>";
+                    }
+
+    $countitem="SELECT count(*) as countitem FROM cart WHERE userID='$user' and orderID=''";
+    $cart = $conn->query($countitem);
+        if ($cart->num_rows > 0) {                    
+            while($row = $cart->fetch_assoc()) {
+                $count=$row['countitem'];
+                echo "<h5><a class='nav-link text-white' href='myCart.php'>Cart<span class='badge badge-danger'>$count</span></a> </h5>";
+            }
+        }                
+
+                    if($user==""){            
+                        echo '<a class="nav-link text-white" href="index.html">Login</a>';
+                    }
+                    else{
+                        echo '<a class="nav-link text-white" href="product_list.php?u=logout">Logout</a>';
+                    }
+                ?>
             </div>
         </nav>
         <div class="container-fluid">
@@ -91,7 +127,7 @@ $result=$conn->query($sql); //run SQL
                                         while($row = $result->fetch_assoc()) { 
                                 ?>
                                 <div class="col-sm-4">
-                                    <div class="card">
+                                    <div class="card h-100">
                                     <div class="card-body">
                                         <h5 class="card-title"><?php echo $row['title'];?></h5>
                                         <a href="product_detail.php?ID=<?php echo $row['ID']; ?>"><img src="images/<?php echo $row['image'];?>" alt="Samsung Galaxy" class="img-fluid"></a>

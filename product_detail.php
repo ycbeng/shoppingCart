@@ -75,9 +75,7 @@ if ($result->num_rows > 0) {
                     <div class="card">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="card border-0">
-                                    <img src="images/<?php echo $image; ?>" alt="" class="img-fluid">
-                                </div>
+                                <img src="images/<?php echo $image; ?>" alt="" class="img-fluid">                             
                             </div>
                             <div class="col-sm-6">
                                 <div class="card border-0">
