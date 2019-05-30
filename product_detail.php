@@ -1,5 +1,7 @@
 <?php 
 include("config.php");
+session_start();
+
 $ID="1001";
 if(isset($_GET['ID'])){
     $ID=" and ID='".$_GET['ID']."'";
@@ -57,11 +59,43 @@ if ($result->num_rows > 0) {
                   <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
                   <button class="btn btn-primary my-2 my-sm-0 " type="submit">Search</button>
                 </form>
+
+                <?php
+                    $user="";
+                    if(isset($_GET['u'])){
+                        if($_GET['u']=='logout'){
+                        session_destroy(); //clear $user value
+                        echo "<script>window.location.assign('index.html');</script>";
+                        }
+                    }
+
+                    if(isset($_SESSION['user'])){ 
+                        echo "<a class='nav-link text-white' href='#'>".$_SESSION['user']."</a>";
+                        $user=$_SESSION['user'];
+                    }
+
+    $countitem="SELECT count(*) as countitem FROM cart WHERE userID='$user' and orderID=''";
+    $cart = $conn->query($countitem);
+        if ($cart->num_rows > 0) {                    
+            while($row = $cart->fetch_assoc()) {
+                $count=$row['countitem'];
+                    echo "<h5><a class='nav-link text-white' href='myCart.php'>Cart<span class='badge badge-danger'>$count</span></a> </h5>";
+            }
+        }                 
+
+                    if($user==""){            
+                        echo '<a class="nav-link text-white" href="index.html">Login</a>';
+                    }
+                    else{
+                        echo '<a class="nav-link text-white" href="product_detail.php?u=logout">Logout</a>';
+                    }
+
+                ?>
               
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="row">
+            <div class="row" style="padding-top:20px">
                 <div class="col-md-2">
                     <ul class="list-group">
                         <li class="list-group-item active">Brands</li>

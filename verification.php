@@ -24,7 +24,7 @@ if ($stmt = $conn->prepare("select username,password from user where username=? 
     if($stmt->fetch()){		
 		$_SESSION['user'] = $u; //assign the username to session value		
         echo $_SESSION['user']." login Successful";
-        echo "<script>window.location.assign('table.php');</script>";
+        echo "<script>window.location.assign('product_list.php');</script>";
     }
     else{
         echo "Login Fail";
