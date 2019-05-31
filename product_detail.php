@@ -2,11 +2,20 @@
 include("config.php");
 session_start();
 
+if(isset($_POST['userID'])){
+    $userID=$_POST['userID'];
+    $quantity=$_POST['quantity'];
+    $productID=$_GET['ID'];
+    $sql="insert into cart (productID,pQuantity,userID,dateAdd)values('$productID','$quantity','$userID',CURDATE())";
+    $result=$conn->query($sql);
+}
+
+
 $ID="1001";
 if(isset($_GET['ID'])){
     $ID=" and ID='".$_GET['ID']."'";
 }
-$sql="select ID,title,description,image,price from product_detail where available='1'".$ID;
+$sql="select ID,title,description,image,price,quantity from product_detail where available='1'".$ID;
 $result=$conn->query($sql); //run SQL
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
@@ -15,8 +24,12 @@ if ($result->num_rows > 0) {
       $description=$row['description'];
       $image=$row['image'];
       $price=$row['price'];
+      $quantity=$row['quantity'];
     }
-}     
+} 
+
+
+
 ?>
 
 <!doctype html>
@@ -95,6 +108,7 @@ if ($result->num_rows > 0) {
             </div>
         </nav>
         <div class="container-fluid">
+        <form method="post" action="product_detail.php?ID=<?php echo $_GET['ID'] ?>">
             <div class="row" style="padding-top:20px">
                 <div class="col-md-2">
                     <ul class="list-group">
@@ -114,8 +128,26 @@ if ($result->num_rows > 0) {
                             <div class="col-sm-6">
                                 <div class="card border-0">
                                     <div class="card-body">
-                                        <h5 class="card-title"><?php echo $title; ?></h5><br />
+                                        <h5 class="card-title"><?php echo $title; ?></h5><br /> 
                                         <div style="height:100px"><?php echo $description; ?></div><br/>	
+    <?php
+        $ID=$_GET['ID']; //get product ID
+        $countProduct=0; //define default item value
+        $sql="SELECT pQuantity FROM cart WHERE productID='$ID' and orderID<>''";  //get saled item
+        $result = $conn->query($sql);
+            if ($result->num_rows > 0) {                    
+                while($row = $result->fetch_assoc()) {
+                    $countProduct=$row['pQuantity'];
+                }//end while
+            } //end if
+                 
+    ?>
+    <div style="height:100px">
+        Quantity <input type="number" name="quantity" value="1" min="1" max="<?php echo $quantity-$countProduct; ?>">Available stock :
+        <?php echo $quantity-$countProduct; ?>
+		<input name="userID" type="hidden" value="<?php echo $user; ?>" />
+	</div><br />            
+
                                         <div style="height:100px">RM <?php echo $price; ?><button style="float:right;" class="btn btn-danger btn-xs">AddToCart</button>
                                         </div><br/>			
                                     </div>                                
@@ -126,6 +158,7 @@ if ($result->num_rows > 0) {
                 </div>
                 <div class="col-md-1"></div>
             </div>
+            </form>
         </div>
     </body>
 
