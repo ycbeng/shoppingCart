@@ -1,6 +1,7 @@
 <?php 
 include("config.php");
 session_start();
+$user=$_SESSION['user'];
 
 if(isset($_POST['userID'])){
     $userID=$_POST['userID'];
@@ -133,14 +134,13 @@ if ($result->num_rows > 0) {
     <?php
         $ID=$_GET['ID']; //get product ID
         $countProduct=0; //define default item value
-        $sql="SELECT pQuantity FROM cart WHERE productID='$ID' and orderID<>''";  //get saled item
+        $sql="SELECT sum(pQuantity) as pQuantity FROM cart WHERE productID='$ID'";  //get saled item
         $result = $conn->query($sql);
             if ($result->num_rows > 0) {                    
                 while($row = $result->fetch_assoc()) {
                     $countProduct=$row['pQuantity'];
                 }//end while
-            } //end if
-                 
+            } //end if                 
     ?>
     <div style="height:100px">
         Quantity <input type="number" name="quantity" value="1" min="1" max="<?php echo $quantity-$countProduct; ?>">Available stock :
@@ -148,7 +148,7 @@ if ($result->num_rows > 0) {
 		<input name="userID" type="hidden" value="<?php echo $user; ?>" />
 	</div><br />            
 
-                                        <div style="height:100px">RM <?php echo $price; ?><button style="float:right;" class="btn btn-danger btn-xs">AddToCart</button>
+                <div style="height:100px">RM <?php echo $price; ?><button style="float:right;" class="btn btn-danger btn-xs">AddToCart</button>
                                         </div><br/>			
                                     </div>                                
                                 </div>
