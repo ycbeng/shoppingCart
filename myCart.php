@@ -2,12 +2,6 @@
 include("config.php");
 session_start();
 $user=$_SESSION['user'];
-
-
-
-
-
-
 ?>
 
 <!doctype html>
@@ -28,6 +22,29 @@ $user=$_SESSION['user'];
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <title>Hello, world!</title>
+
+    <script>
+        function cal(){
+            var names = document.getElementsByName('subamount[]');
+            var subtotal=0;
+            var tax=0;
+            var total=0;            
+            var cboxes = document.getElementsByName('item[]'); 
+            var len = cboxes.length;//get number check box    
+            for (var i=0; i<len; i++) {        
+                if(cboxes[i].checked){	//calculate if checked		
+                    subtotal=parseFloat(names[i].value)+parseFloat(subtotal);	
+                    console.log(subtotal);
+                }					
+            }
+            
+            tax=subtotal*0.1;
+            total=subtotal+tax;
+            document.getElementById('subtotal').value=subtotal.toFixed(2);
+            document.getElementById('tax').value=tax.toFixed(2);
+            document.getElementById('total').value=total.toFixed(2);
+                }
+    </script>
 
   </head>
   <body>           
@@ -142,6 +159,20 @@ $user=$_SESSION['user'];
         }
     } 
     ?>
+
+    <tr>
+        <td>Subtotal <input type="text" name="subtotal" id="subtotal"></td>
+    </tr>
+    <tr>
+        <td>Tax <input type="text" name="tax" id="tax"></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="Calculate" onclick="cal()">
+    Total <input type="text" name="total" id="total"></td>
+    </tr>
+
+
+
                 </div>
                 <div class="col-md-1"></div>
             </div>
