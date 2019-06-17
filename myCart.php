@@ -1,7 +1,9 @@
 <?php 
 include("config.php");
 session_start();
-$user=$_SESSION['user'];
+if(isset($_SESSION['user'])){
+    $user=$_SESSION['user'];
+}
 ?>
 
 <!doctype html>
@@ -103,7 +105,7 @@ $user=$_SESSION['user'];
             </div>
         </nav>
         <div class="container-fluid">
-        <form method="post" action="product_detail.php?ID=<?php echo $_GET['ID'] ?>">
+        <form method="post" action="insertInvoice.php">
             <div class="row" style="padding-top:20px">
                 <div class="col-md-2">
                     <ul class="list-group">
@@ -116,11 +118,12 @@ $user=$_SESSION['user'];
                 <div class="col-md-1"></div>
                 <div class="col-md-8">
     <?php
-        $sql="select b.ID,b.title,b.description,b.image,b.price,a.pQuantity,b.available from cart as a left join product_detail as b on a.productID=b.ID where a.userID='$user'";
+        $sql="select b.ID,b.title,b.description,b.image,b.price,a.pQuantity,b.available,a.ID as cartID from cart as a left join product_detail as b on a.productID=b.ID where a.userID='$user' and orderID=''";
         $result=$conn->query($sql); //run SQL
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
               $ID=$row['ID'];
+              $cartID=$row['cartID'];
               $title=$row['title'];
               $description=$row['description'];
               $image=$row['image'];
@@ -136,7 +139,7 @@ $user=$_SESSION['user'];
                 <div class="col-md-1">
                     <?php
                         if($available==1){
-                            echo '<input type="checkbox" name="item[]" value="" />';
+                            echo '<input type="checkbox" name="item[]" value="'.$cartID.'" />';
                         }
                         else{
                             echo 'N/A <input type="checkbox" name="item[]" value="" disabled />';
@@ -159,17 +162,16 @@ $user=$_SESSION['user'];
         }
     } 
     ?>
+    <div align="right">
+        Subtotal <input type="text" name="subtotal" id="subtotal"><br>
+        
+        Tax <input type="text" name="tax" id="tax"><br>
 
-    <tr>
-        <td>Subtotal <input type="text" name="subtotal" id="subtotal"></td>
-    </tr>
-    <tr>
-        <td>Tax <input type="text" name="tax" id="tax"></td>
-    </tr>
-    <tr>
-        <td><input type="button" value="Calculate" onclick="cal()">
-    Total <input type="text" name="total" id="total"></td>
-    </tr>
+        <input type="submit" value="Check out">
+        <input type="button" value="Calculate" onclick="cal()">
+        Total <input type="text" name="total" id="total">           
+    </div>
+    
 
 
 
