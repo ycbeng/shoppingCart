@@ -123,7 +123,7 @@ if(isset($_SESSION['user'])){
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
               $ID=$row['ID'];
-              $cartID=$row['cartID'];
+              $cartID=$row['cartID'];//get cart ID for myOrder table
               $title=$row['title'];
               $description=$row['description'];
               $image=$row['image'];
