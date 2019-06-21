@@ -50,7 +50,7 @@ if(isset($_POST['total'])){
     </tr>
 <?php
 
-$sql="SELECT a.*,b.*,c.title FROM `myorder` as a left join cart as b on a.ID=b.orderID left join product_detail as c on b.productID=c.ID where a.userID='$user' and a.ID='$orderID'";
+$sql="SELECT a.*,b.*,c.title,c.price FROM `myorder` as a left join cart as b on a.ID=b.orderID left join product_detail as c on b.productID=c.ID where a.userID='$user' and a.ID='$orderID'";
 
 $result = $conn->query($sql);
 	if ($result->num_rows > 0) {    
@@ -60,7 +60,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['productID']; ?></td>
                     <td><?php echo $row['title']; ?></td>
                     <td><?php echo $row['pQuantity']; ?></td>
-                    <td></td>
+                    <td><?php echo $row['pQuantity']*$row['price']; ?></td>
                 </tr>
             <?php
         }
